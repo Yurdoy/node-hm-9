@@ -20,6 +20,10 @@ module.exports = {
         unique: true,
       },
       password: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.fn("NOW"),
