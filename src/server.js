@@ -3,6 +3,8 @@ import "dotenv/config";
 import sequelize from "./config/db.js";
 import bcrypt from "bcrypt";
 import User from "./models/User.js";
+import jwt from "jsonwebtoken";
+import { authMiddleWare } from "./middleware/auth.js";
 
 const app = express();
 app.use(express.json());
