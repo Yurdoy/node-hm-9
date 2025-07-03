@@ -15,6 +15,8 @@ app.get("/", (req, res) => {
   res.send("Hello, sequelize with Express");
 });
 
+app.get();
+
 app.get("/users", authMiddleWare, async (req, res) => {
   try {
     const users = await User.findAll();
