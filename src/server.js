@@ -6,6 +6,7 @@ import User from "./models/User.js";
 import jwt from "jsonwebtoken";
 import { authMiddleWare } from "./middleware/auth.js";
 import { checkPasswordChange } from "./middleware/checkPasswordChange.js";
+import checkRole from "./middleware/checkRole.js";
 
 const app = express();
 app.use(express.json());
@@ -15,7 +16,9 @@ app.get("/", (req, res) => {
   res.send("Hello, sequelize with Express");
 });
 
-app.get();
+app.get("/admin", authMiddleWare, checkRole, async (req, res) => {
+  res.status(200).json({ message: "Welcom to admin area" });
+});
 
 app.get("/users", authMiddleWare, async (req, res) => {
   try {
