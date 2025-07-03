@@ -1,5 +1,7 @@
 "use strict";
 
+const { DataTypes } = require("sequelize");
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -26,6 +28,11 @@ module.exports = {
       mustChangePassword: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
+      },
+      role: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: "user",
       },
       createdAt: {
         type: Sequelize.DATE,
