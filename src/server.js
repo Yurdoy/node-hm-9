@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import User from "./models/User.js";
 import jwt from "jsonwebtoken";
 import { authMiddleWare } from "./middleware/auth.js";
+import { checkPasswordChange } from "./middleware/checkPasswordChange.js";
 
 const app = express();
 app.use(express.json());
@@ -12,6 +13,15 @@ const PORT = process.env.PORT || 3000;
 
 app.get("/", (req, res) => {
   res.send("Hello, sequelize with Express");
+});
+
+app.get("/users", authMiddleWare, async (req, res) => {
+  try {
+    const users = await User.findAll();
+    res.status(200).json(users);
+  } catch (error) {
+    res.send(500).json(error);
+  }
 });
 
 app.post("/register", async (req, res) => {
@@ -32,7 +42,7 @@ app.post("/register", async (req, res) => {
   }
 });
 
-app.post("/login", async (req, res) => {
+app.post("/login", checkPasswordChange, async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -54,6 +64,29 @@ app.post("/login", async (req, res) => {
     res.status(200).json({ message: "Login successfully", token });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+});
+
+app.post("/change-password", async (req, res) => {
+  const { email, newPassword } = req.body;
+  try {
+    if (!email || !newPassword) {
+      return res
+        .status(400)
+        .json({ message: "Email and new password are required" });
+    }
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    user.mustChangePassword = false;
+    await user.save();
+    return res.status(200).json({ message: "Password changed successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 });
 
