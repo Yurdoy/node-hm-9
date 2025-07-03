@@ -1,0 +1,32 @@
+{
+  "name": "hm-9",
+  "version": "1.0.0",
+  "description": "Домашняя работа 9",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon ./src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yurdoy/node-hm-9.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Yurdoy/node-hm-9/issues"
+  },
+  "homepage": "https://github.com/Yurdoy/node-hm-9#readme",
+  "dependencies": {
+    "dotenv": "^17.0.1",
+    "express": "^5.1.0",
+    "mysql2": "^3.14.1",
+    "sequelize": "^6.37.7",
+    "sequelize-cli": "^6.6.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
