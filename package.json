@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/Yurdoy/node-hm-9#readme",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "dotenv": "^17.0.1",
     "express": "^5.1.0",
     "mysql2": "^3.14.1",
