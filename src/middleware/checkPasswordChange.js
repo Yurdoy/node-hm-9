@@ -1,6 +1,6 @@
-import User from "../models/User";
+import User from "../models/User.js";
 
-const checkPasswordChange = async (req, res, next) => {
+export const checkPasswordChange = async (req, res, next) => {
   const { email } = req.body;
   try {
     const user = await User.findOne({ where: { email } });
@@ -15,5 +15,3 @@ const checkPasswordChange = async (req, res, next) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
-
-export default checkPasswordChange;

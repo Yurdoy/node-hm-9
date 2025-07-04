@@ -27,7 +27,7 @@ module.exports = {
       },
       mustChangePassword: {
         type: Sequelize.BOOLEAN,
-        defaultValue: false,
+        defaultValue: true,
       },
       role: {
         type: DataTypes.STRING,

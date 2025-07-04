@@ -5,8 +5,8 @@ import bcrypt from "bcrypt";
 import User from "./models/User.js";
 import jwt from "jsonwebtoken";
 import { authMiddleWare } from "./middleware/auth.js";
-import { checkPasswordChange } from "./middleware/checkPasswordChange.js";
-import checkRole from "./middleware/checkRole.js";
+import { checkPasswordChange } from "../src/middleware/checkPasswordChange.js";
+import checkRole from "../src/middleware/checkRole.js";
 
 const app = express();
 app.use(express.json());
@@ -17,7 +17,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/admin", authMiddleWare, checkRole, async (req, res) => {
-  res.status(200).json({ message: "Welcom to admin area" });
+  res.status(200).json({ message: "Welcome to admin area" });
 });
 
 app.get("/users", authMiddleWare, async (req, res) => {
@@ -64,7 +64,7 @@ app.post("/login", checkPasswordChange, async (req, res) => {
     const token = jwt.sign(
       { id: user.id, email: user.email, name: user.name },
       process.env.JWT_SECRET,
-      { expireIn: "24h" }
+      { expiresIn: "1h" }
     );
     res.status(200).json({ message: "Login successfully", token });
   } catch (error) {
@@ -86,7 +86,7 @@ app.post("/change-password", async (req, res) => {
     }
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     user.password = hashedPassword;
-    user.mustChangePassword = false;
+    user.mustChangePassword = true;
     await user.save();
     return res.status(200).json({ message: "Password changed successfully" });
   } catch (error) {
@@ -121,12 +121,10 @@ app.post("/change-email", authMiddleWare, async (req, res) => {
     }
     user.email = newEmail;
     await user.save();
-    return res
-      .status(500)
-      .json({
-        message: "Email changed successfully",
-        user: { id: user.id, email: user.email },
-      });
+    return res.status(500).json({
+      message: "Email changed successfully",
+      user: { id: user.id, email: user.email },
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
