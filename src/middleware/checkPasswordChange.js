@@ -4,7 +4,10 @@ export const checkPasswordChange = async (req, res, next) => {
   const { email } = req.body;
   try {
     const user = await User.findOne({ where: { email } });
-    if (user && user.mustChangePassword) {
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (user.mustChangePassword) {
       return res
         .status(403)
         .json({ message: "You must change password before loggin in" });
