@@ -61,6 +61,9 @@ app.post("/login", checkPasswordChange, async (req, res) => {
     if (!isPasswordValid) {
       res.status(401).json({ message: "Invalid credentials" });
     }
+    if (user.mustChangePassword) {
+      return res.status(403).json({ message: "Please change password" });
+    }
     const token = jwt.sign(
       { id: user.id, email: user.email, name: user.name },
       process.env.JWT_SECRET,
@@ -86,7 +89,7 @@ app.post("/change-password", async (req, res) => {
     }
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     user.password = hashedPassword;
-    user.mustChangePassword = true;
+    user.mustChangePassword = false;
     await user.save();
     return res.status(200).json({ message: "Password changed successfully" });
   } catch (error) {
