@@ -16,16 +16,22 @@ app.get("/", (req, res) => {
   res.send("Hello, sequelize with Express");
 });
 
-app.get("/admin", authMiddleWare, checkRole, async (req, res) => {
-  res.status(200).json({ message: "Welcome to admin area" });
-});
-
 app.get("/users", authMiddleWare, async (req, res) => {
   try {
     const users = await User.findAll();
     res.status(200).json(users);
   } catch (error) {
     res.send(500).json(error);
+  }
+});
+
+app.get("/admin", authMiddleWare, checkRole, async (req, res) => {
+  try {
+    const users = await User.findAll();
+    res.status(200).json({ message: "Welcome to admin area", users });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -43,7 +49,7 @@ app.post("/register", async (req, res) => {
     const user = await User.create({ name, email, password: hashedPassword });
     res.status(201).json({ message: "User successfully registered" });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
 

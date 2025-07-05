@@ -1,13 +1,9 @@
-const checkRole = (role) => {
-  return (req, res, next) => {
-    if (!req.user) {
-      return res.status(401).json({ message: "Authorization require" });
-    }
-    if (req.user.role !== role) {
-      return res.status(403).json({ message: "Access denied" });
-    }
+const checkRole = (req, res, next) => {
+  if (req.user && req.user.role === "admin") {
     next();
-  };
+  } else {
+    return res.status(403).json({ message: "Access denied" });
+  }
 };
 
 export default checkRole;
