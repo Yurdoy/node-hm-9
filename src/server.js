@@ -81,7 +81,7 @@ app.post("/login", checkPasswordChange, async (req, res) => {
   }
 });
 
-app.post("/change-password", async (req, res) => {
+app.post("/change-password", authMiddleWare, async (req, res) => {
   const { email, newPassword } = req.body;
   try {
     if (!email || !newPassword) {
@@ -97,6 +97,7 @@ app.post("/change-password", async (req, res) => {
     user.password = hashedPassword;
     user.mustChangePassword = false;
     await user.save();
+
     return res.status(200).json({ message: "Password changed successfully" });
   } catch (error) {
     console.error(error);
